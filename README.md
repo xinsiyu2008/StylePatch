@@ -28,30 +28,6 @@ A lightweight browser extension that lets you customize any webpage's background
 
 ---
 
-## How It Works
-
-```
-User clicks extension icon
-        │
-        ▼
-   Popup UI opens
-        │
-        ▼
-Content script injects <style> tag into page
-        │
-        ▼
-Page appearance updates in real-time
-        │
-        ▼
-Settings saved to chrome.storage.local (per domain)
-```
-
-- **Popup** — User interface with color pickers, font slider, and action buttons
-- **Content Script** — Injects a single `<style>` element to override page styles
-- **Background Service Worker** — Handles storage and message routing
-
----
-
 ## Supported Browsers
 
 | Browser | Status |
@@ -60,54 +36,23 @@ Settings saved to chrome.storage.local (per domain)
 | Microsoft Edge | ✅ Fully supported |
 | Other Chromium-based browsers | ✅ Should work |
 
-> Built on Chromium's extension platform — works across all Chromium-based browsers.
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Platform | Chromium Extension (Manifest V3) |
-| Frontend | Vanilla JavaScript, HTML5, CSS3 |
-| Build Tool | Node.js + Terser |
-| Storage | `chrome.storage.local` |
-
----
-
-## Permissions
-
-| Permission | Why Needed |
-|------------|-----------|
-| `activeTab` | Apply styles to the currently active tab |
-| `storage` | Save and load per-site style configurations |
-
-> **Privacy-first**: We do NOT use `<all_urls>` host permission. We do NOT read browsing history, track users, or send any data externally.
-
 ---
 
 ## Installation
 
-### From Web Store
-
-_(Coming soon)_
-
-### Load Unpacked (Developer)
-
-1. Clone or download this repository
-2. Open your browser's extension page:
+1. Open your browser's extension page:
    - **Chrome**: `chrome://extensions/`
    - **Edge**: `edge://extensions/`
-3. Enable **Developer mode** (top-right toggle)
-4. Click **Load unpacked** and select the project folder
-5. Click the StylePatch icon in your toolbar to start
+2. Enable **Developer mode** (top-right toggle)
+3. Click **Load unpacked** and select the project folder
+4. Click the StylePatch icon in your toolbar to start
 
 ---
 
 ## Usage
 
 1. **Click the StylePatch icon** in your browser toolbar
-2. **Pick colors** — Use the native color picker or type a hex code (e.g., `#FF5733`)
+2. **Pick colors** — Use the native color picker or type a hex code
 3. **Adjust font size** — Drag the slider from 60% to 150%
 4. **Eye Care mode** — Click 👁 for a warm, comfortable reading theme
 5. **Save** — Click **Apply & Save** to persist settings for this site
@@ -117,39 +62,11 @@ Settings are automatically saved when the popup closes, and restored when you re
 
 ---
 
-## Build
+## Privacy
 
-```bash
-npm install
-npm run build
-```
-
-Output will be in the `build/` directory, ready to load into Chrome or Edge.
-
----
-
-## Project Structure
-
-```
-style-patch/
-├── manifest.json        # Extension configuration (Manifest V3)
-├── package.json         # Build dependencies
-├── build.js             # Build script (Terser minification)
-├── assets/              # Extension icons
-├── popup/               # Popup UI (HTML, CSS, JS)
-├── content/             # Content script (style injection)
-└── background/          # Service Worker (storage & messaging)
-```
-
----
-
-## Roadmap
-
-- [ ] Element picker for targeted CSS modifications
-- [ ] Custom CSS editor (advanced mode)
-- [ ] Domain blacklist / whitelist
-- [ ] Export & import style configurations
-- [ ] Dark mode presets
+- Only `activeTab` + `storage` permissions — nothing more
+- No browsing history access, no user tracking, no external data transmission
+- All data stays local in your browser
 
 ---
 
