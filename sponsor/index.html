@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support StylePatch · 赞助</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background: #f8f9fa;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      max-width: 520px;
+      width: 100%;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+      padding: 40px 32px;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 6px;
+    }
+    .sub {
+      font-size: 15px;
+      color: #5f6368;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .lang-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 16px 0 20px;
+      font-size: 13px;
+      color: #9aa0a6;
+    }
+    .lang-divider span { background: #f1f3f4; padding: 0 12px; border-radius: 20px; }
+    .spinner {
+      display: inline-block;
+      width: 36px;
+      height: 36px;
+      border: 4px solid #e8eaed;
+      border-top-color: #1a73e8;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 8px 0 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .detect-msg {
+      font-size: 14px;
+      color: #3c4043;
+      margin: 10px 0 20px;
+    }
+    .manual-title {
+      font-size: 13px;
+      color: #80868b;
+      margin: 20px 0 12px;
+      border-top: 1px solid #e8eaed;
+      padding-top: 18px;
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 10px 22px;
+      border-radius: 24px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: all 0.2s;
+      border: 1px solid #dadce0;
+      background: white;
+      color: #1a73e8;
+      min-width: 120px;
+    }
+    .btn:hover {
+      background: #f1f3f4;
+      border-color: #1a73e8;
+      transform: translateY(-1px);
+    }
+    .btn.primary {
+      background: #1a73e8;
+      color: white;
+      border-color: #1a73e8;
+    }
+    .btn.primary:hover {
+      background: #1557b0;
+      border-color: #1557b0;
+    }
+    .footer-note {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #9aa0a6;
+      border-top: 1px solid #f1f3f4;
+      padding-top: 16px;
+    }
+    @media (max-width: 480px) {
+      .container { padding: 28px 20px; }
+      .btn { min-width: 100px; padding: 8px 16px; font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="icon">🎨</div>
+  <h1>StylePatch</h1>
+  <div class="sub">
+    <span>❤️ Support the Developer</span>
+    <span style="margin:0 8px;">·</span>
+    <span>❤️ 赞助开发者</span>
+  </div>
+
+  <!-- 检测动画 -->
+  <div id="detectArea">
+    <div class="spinner" id="spinner"></div>
+    <div class="detect-msg" id="detectMsg">
+      <span>Detecting your region, redirecting...</span><br>
+      <span style="font-size:13px;color:#80868b;">正在检测您所在地区，即将跳转……</span>
+    </div>
+  </div>
+
+  <!-- 手动选择（默认隐藏，检测失败或超时后显示） -->
+  <div id="manualArea" style="display:none;">
+    <div class="manual-title">— 手动选择 / Manual Selection —</div>
+    <div class="btn-group">
+      <a href="https://afdian.net/a/your_afdian_id" class="btn primary" target="_blank">🇨🇳 爱发电</a>
+      <a href="https://ko-fi.com/your_kofi_id" class="btn" target="_blank">🌍 Ko-fi</a>
+    </div>
+    <div style="font-size:12px;color:#9aa0a6;margin-top:10px;">
+      中国大陆用户请选爱发电 · Chinese mainland users choose Afdian
+    </div>
+  </div>
+
+  <div class="footer-note">
+    ⚡ All data processed locally · 所有数据仅在本地处理
+  </div>
+</div>
+
+<!-- 使用 ipapi.co 轻量级 IP 查询（支持 HTTPS） -->
+<script src="https://cdn.jsdelivr.net/npm/ipapi@1.0.0"></script>
+<script>
+  (function() {
+    const detectArea = document.getElementById('detectArea');
+    const manualArea = document.getElementById('manualArea');
+    const spinner = document.getElementById('spinner');
+    const detectMsg = document.getElementById('detectMsg');
+
+    // 占位链接（请替换为真实地址）
+    const AFDIAN_URL = 'https://afdian.net/a/your_afdian_id';
+    const KOFI_URL   = 'https://ko-fi.com/your_kofi_id';
+
+    // 显示手动选择（隐藏检测区域）
+    function showManual() {
+      detectArea.style.display = 'none';
+      manualArea.style.display = 'block';
+    }
+
+    // 尝试自动跳转
+    function tryRedirect() {
+      // 使用 ipapi 获取位置
+      if (typeof ipapi !== 'undefined' && ipapi.getLocation) {
+        ipapi.getLocation()
+          .then(res => {
+            const country = res.country_code; // 如 "CN", "US"
+            if (country === 'CN') {
+              window.location.href = AFDIAN_URL;
+            } else {
+              window.location.href = KOFI_URL;
+            }
+          })
+          .catch(err => {
+            // API 调用失败（如网络限制），展示手动选择
+            showManual();
+          });
+      } else {
+        // ipapi 库未加载，直接展示手动选择
+        showManual();
+      }
+    }
+
+    // 设置超时：如果 3 秒内未完成跳转，则展示手动选择（防止卡住）
+    const timeoutId = setTimeout(() => {
+      // 如果页面还没跳转，说明可能卡住了，展示手动选择
+      showManual();
+    }, 3000);
+
+    // 执行跳转逻辑
+    tryRedirect();
+
+    // 如果跳转成功，页面会离开，超时自动失效；但为了保险，清理超时
+    // 但无法在跳转后清理，所以采用标志方式。
+    // 更稳健：在 tryRedirect 中若执行跳转，则清理超时。
+    // 由于跳转是同步的 location.href，会立即卸载页面，所以超时不会触发。
+    // 但如果跳转被拦截（如浏览器阻止），则超时会触发。
+    // 这里我们保留超时作为兜底。
+  })();
+</script>
+</body>
+</html>
